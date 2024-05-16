@@ -1,0 +1,32 @@
+plugins {
+  id 'idea'
+  id 'java-library'
+}
+
+allprojects {
+
+  apply plugin: 'idea'
+  apply plugin: 'java-library'
+
+  group = 'dev.tiltrikt'
+  version = '0.0.1-SNAPSHOT'
+
+  sourceCompatibility = JavaVersion.VERSION_21
+  targetCompatibility = JavaVersion.VERSION_21
+
+  dependencies {
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jUnitVersion"
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:$jUnitVersion"
+  }
+
+  tasks.named('test') {
+    useJUnitPlatform()
+  }
+}
