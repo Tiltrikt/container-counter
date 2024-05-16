@@ -1,21 +1,40 @@
 package dev.tiltrikt.container.counter.bootstrap;
 
-import dev.tiltrikt.container.counter.service.CounterServiceImpl;
+import dev.tiltrikt.container.counter.service.counter.CounterService;
+import dev.tiltrikt.container.counter.service.counter.CounterServiceImpl;
+import dev.tiltrikt.container.counter.service.extactor.NumberExtractor;
+import dev.tiltrikt.container.counter.service.extactor.NumberExtractorImpl;
+import dev.tiltrikt.container.counter.service.processor.MatrixProcessor;
+import dev.tiltrikt.container.counter.service.processor.MatrixProcessorImpl;
+import lombok.AccessLevel;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.FieldDefaults;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ContainerCounterBootstrap {
+
+  @NotNull
+  NumberExtractor numberExtractor = new NumberExtractorImpl();
+
+  @NotNull
+  MatrixProcessor matrixProcessor = new MatrixProcessorImpl(numberExtractor);
+
+  @NotNull
+  CounterService counterService = new CounterServiceImpl(matrixProcessor);
 
   @SneakyThrows
   public void bootstrap(String[] args) {
-    validateArgs(args);
+    try {
+      validateArgs(args);
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+      return;
+    }
 
-    CounterServiceImpl counterService = new CounterServiceImpl();
     counterService.countContainers(args[0]);
   }
 

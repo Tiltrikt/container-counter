@@ -5,7 +5,7 @@ import dev.tiltrikt.container.counter.bootstrap.ContainerCounterBootstrap;
 
 public class Main {
 
-  private static ContainerCounterBootstrap containerCounterBootstrap = new ContainerCounterBootstrap();
+  private static final ContainerCounterBootstrap containerCounterBootstrap = new ContainerCounterBootstrap();
 
   public static void main(String[] args) {
     containerCounterBootstrap.bootstrap(args);
