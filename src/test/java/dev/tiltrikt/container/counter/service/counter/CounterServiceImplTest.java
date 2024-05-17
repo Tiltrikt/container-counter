@@ -2,15 +2,15 @@ package dev.tiltrikt.container.counter.service.counter;
 
 import dev.tiltrikt.container.counter.service.extactor.NumberExtractor;
 import dev.tiltrikt.container.counter.service.extactor.NumberExtractorImpl;
+import dev.tiltrikt.container.counter.service.parser.InputParser;
+import dev.tiltrikt.container.counter.service.parser.InputParserImpl;
 import dev.tiltrikt.container.counter.service.processor.MatrixProcessor;
 import dev.tiltrikt.container.counter.service.processor.MatrixProcessorImpl;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -30,21 +30,23 @@ class CounterServiceImplTest {
   @NotNull
   MatrixProcessor matrixProcessor = new MatrixProcessorImpl(numberExtractor);
   @NotNull
-  ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+  InputParser inputParser = new InputParserImpl();
   @NotNull
-  CounterService counterService = new CounterServiceImpl(matrixProcessor);
+  private final static ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+  @NotNull
+  CounterService counterService = new CounterServiceImpl(matrixProcessor, inputParser);
 
 
   @SneakyThrows
-  @BeforeEach
-  public void setUp() {
+  @BeforeAll
+  public static void setUp() {
     assertTrue(Files.exists(Path.of(TEST_FILENAME)));
     System.setIn(new FileInputStream(TEST_FILENAME));
     System.setOut(new PrintStream(outputStreamCaptor));
   }
 
-  @AfterEach
-  public void tearDown() {
+  @AfterAll
+  public static void tearDown() {
     System.setOut(System.out);
     System.setIn(System.in);
   }
