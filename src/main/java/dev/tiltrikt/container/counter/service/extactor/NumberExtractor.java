@@ -1,5 +1,9 @@
 package dev.tiltrikt.container.counter.service.extactor;
 
+/**
+ * Interface provides a method to extract a number from a specified position
+ * in a character matrix.
+ */
 public interface NumberExtractor {
 
   /**

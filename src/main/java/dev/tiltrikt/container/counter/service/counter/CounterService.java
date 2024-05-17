@@ -2,6 +2,7 @@ package dev.tiltrikt.container.counter.service.counter;
 
 import org.jetbrains.annotations.NotNull;
 
+ /** Service is responsible for counting containers from a given file.*/
 public interface CounterService {
 
   /**

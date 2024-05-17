@@ -1,5 +1,9 @@
 package dev.tiltrikt.container.counter.service.processor;
 
+/**
+ * Interface provides methods to count numbers located
+ * next to specific symbols of a provided 3xN character array.
+ */
 public interface MatrixProcessor {
 
   /**

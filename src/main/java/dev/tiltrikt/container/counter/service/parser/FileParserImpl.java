@@ -7,6 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 
+/**
+ * Class for reading and parsing lines from a file.
+ * Allows to convert file into a format convenient for processing
+ * This implementation uses a {@link BufferedReader} to read the file line by line.
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FileParserImpl implements FileParser {
 
@@ -29,7 +34,7 @@ public class FileParserImpl implements FileParser {
    * reads the next line into last row.
    * <br>
    *
-   * In case of ending file method throw no exception but put null in the last row.
+   * In case of ending file method return null but still shifts matrix and put null in the last row.
    *
    * @param matrix a 3xN character matrix to store the lines
    * @return {@code 1} if lines were successfully read, {@code 0} if the end of the file was reached
@@ -54,7 +59,14 @@ public class FileParserImpl implements FileParser {
     return 1;
   }
 
-  private char[] parseLine() throws IOException {
+  /**
+   * Reads a single line from the file and converts it to a character array.<br>
+   * In case of ending file no exception would be thrown but method return null.
+   *
+   * @return a character array representing the line, or {@code null} if the end of the file is reached
+   */
+  @SneakyThrows
+  private char[] parseLine() {
     String line = bufferedReader.readLine();
     if (line == null) {
       return null;
