@@ -33,6 +33,10 @@ public class MatrixProcessorImpl implements MatrixProcessor {
   public int count(char[][] matrix) {
     int counter = 0;
 
+    if (matrix[1] == null) {
+      return counter;
+    }
+
     for (int i = 0; i < matrix[1].length; i++) {
       if (!Character.isDigit(matrix[1][i]) && matrix[1][i] != '.') {
 
@@ -73,7 +77,7 @@ public class MatrixProcessorImpl implements MatrixProcessor {
     int counter = 0;
 
     if (matrix[y] != null) {
-      if (Character.isDigit(matrix[y][x])) {
+      if (!(x < 0 || x >= matrix[y].length) && Character.isDigit(matrix[y][x])) {
         counter += numberExtractor.extractNumber(matrix, y, x);
       } else {
         counter += getNumberAtPosition(matrix, y, x - 1);

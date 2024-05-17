@@ -8,6 +8,6 @@ public class Main {
   private static final ContainerCounterBootstrap containerCounterBootstrap = new ContainerCounterBootstrap();
 
   public static void main(String[] args) {
-    containerCounterBootstrap.bootstrap(args);
+    containerCounterBootstrap.bootstrap();
   }
 }

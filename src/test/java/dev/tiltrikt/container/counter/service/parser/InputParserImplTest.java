@@ -3,43 +3,31 @@ package dev.tiltrikt.container.counter.service.parser;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.BufferedWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.ByteArrayInputStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+@ExtendWith(MockitoExtension.class)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+class InputParserImplTest {
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-class FileParserImplTest {
-
-  private final static String TEST_FILENAME = "src/test/resources/test.txt";
-
-  @NotNull FileParser fileParser = new FileParserImpl(TEST_FILENAME);
-
-  @SneakyThrows
-  @BeforeAll
-  static void setUp() {
-    Path path = Paths.get(TEST_FILENAME);
-    if (Files.notExists(path)) {
-      Files.createDirectories(path.getParent());
-      Files.createFile(path);
-    }
+  @AfterAll
+  public static void tearDown() {
+    System.setIn(System.in);
   }
 
   @SneakyThrows
   @Test
   void givenFile_whenResolveFirstTime_thenReturnedResolvedMatrixWithOnlyTwoLines() {
-    BufferedWriter writer = Files.newBufferedWriter(Paths.get(TEST_FILENAME));
-    writer.write("467.\n....\n..*.");
-    writer.close();
+    System.setIn(new ByteArrayInputStream("467.\n....\n..*.".getBytes()));
+    InputParser inputParser = new InputParserImpl();
 
     char[][] matrix = new char[3][];
-    fileParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
 
     char[][] expected = {
         null,
@@ -52,12 +40,11 @@ class FileParserImplTest {
   @SneakyThrows
   @Test
   void givenEmptyFile_whenResolveFirstTime_thenReturnedResolvedMatrixWithNulls() {
-    BufferedWriter writer = Files.newBufferedWriter(Paths.get(TEST_FILENAME));
-    writer.write("");
-    writer.close();
+    System.setIn(new ByteArrayInputStream("".getBytes()));
+    InputParser inputParser = new InputParserImpl();
 
     char[][] matrix = new char[3][];
-    fileParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
 
     char[][] expected = {
         null,
@@ -70,12 +57,11 @@ class FileParserImplTest {
   @SneakyThrows
   @Test
   void givenFileWithOneLine_whenResolveFirstTime_thenReturnedResolvedMatrix() {
-    BufferedWriter writer = Files.newBufferedWriter(Paths.get(TEST_FILENAME));
-    writer.write("456.");
-    writer.close();
+    System.setIn(new ByteArrayInputStream("456.".getBytes()));
+    InputParser inputParser = new InputParserImpl();
 
     char[][] matrix = new char[3][];
-    fileParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
 
     char[][] expected = {
         null,
@@ -88,13 +74,12 @@ class FileParserImplTest {
   @SneakyThrows
   @Test
   void givenFile_whenResolveSecondTime_thenReturnedResolvedMatrixWithThreeLines() {
-    BufferedWriter writer = Files.newBufferedWriter(Paths.get(TEST_FILENAME));
-    writer.write("467.\n....\n..*.");
-    writer.close();
+    System.setIn(new ByteArrayInputStream("467.\n....\n..*.".getBytes()));
+    InputParser inputParser = new InputParserImpl();
 
     char[][] matrix = new char[3][];
-    fileParser.parseBunch(matrix);
-    fileParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
 
     char[][] expected = {
         {'4', '6', '7', '.'},
@@ -103,17 +88,17 @@ class FileParserImplTest {
     };
     assertArrayEquals(expected, matrix);
   }
+
   @SneakyThrows
   @Test
   void givenFile_whenResolveLastTime_thenReturnedResolvedMatrixWithTwoLines() {
-    BufferedWriter writer = Files.newBufferedWriter(Paths.get(TEST_FILENAME));
-    writer.write("467.\n....\n..*.");
-    writer.close();
+    System.setIn(new ByteArrayInputStream("467.\n....\n..*.".getBytes()));
+    InputParser inputParser = new InputParserImpl();
 
     char[][] matrix = new char[3][];
-    fileParser.parseBunch(matrix);
-    fileParser.parseBunch(matrix);
-    fileParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
+    inputParser.parseBunch(matrix);
 
     char[][] expected = {
         {'.', '.', '.', '.'},

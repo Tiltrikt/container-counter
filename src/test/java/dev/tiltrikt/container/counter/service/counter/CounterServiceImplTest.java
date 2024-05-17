@@ -5,6 +5,7 @@ import dev.tiltrikt.container.counter.service.extactor.NumberExtractorImpl;
 import dev.tiltrikt.container.counter.service.processor.MatrixProcessor;
 import dev.tiltrikt.container.counter.service.processor.MatrixProcessorImpl;
 import lombok.AccessLevel;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,24 +30,28 @@ class CounterServiceImplTest {
   @NotNull
   MatrixProcessor matrixProcessor = new MatrixProcessorImpl(numberExtractor);
   @NotNull
-  CounterService counterService = new CounterServiceImpl(matrixProcessor);
-  @NotNull
   ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+  @NotNull
+  CounterService counterService = new CounterServiceImpl(matrixProcessor);
 
+
+  @SneakyThrows
   @BeforeEach
   public void setUp() {
+    assertTrue(Files.exists(Path.of(TEST_FILENAME)));
+    System.setIn(new FileInputStream(TEST_FILENAME));
     System.setOut(new PrintStream(outputStreamCaptor));
   }
 
   @AfterEach
   public void tearDown() {
     System.setOut(System.out);
+    System.setIn(System.in);
   }
 
   @Test
   void givenExampleFile_whenCountContainers_thenReturnedRightValue() {
-    assertTrue(Files.exists(Path.of(TEST_FILENAME)));
-    counterService.countContainers(TEST_FILENAME);
+    counterService.countContainers();
     assertEquals("4361", outputStreamCaptor.toString().trim());
   }
 }

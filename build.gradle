@@ -9,7 +9,6 @@ allprojects {
   apply plugin: 'java-library'
 
   group = 'dev.tiltrikt'
-  version = '0.0.1-SNAPSHOT'
 
   sourceCompatibility = JavaVersion.VERSION_21
   targetCompatibility = JavaVersion.VERSION_21
@@ -29,5 +28,13 @@ allprojects {
 
   tasks.named('test') {
     useJUnitPlatform()
+  }
+}
+
+jar {
+  manifest {
+    attributes(
+            'Main-Class': 'dev.tiltrikt.container.counter.Main'
+    )
   }
 }

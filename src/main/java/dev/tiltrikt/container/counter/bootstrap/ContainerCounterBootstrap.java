@@ -11,9 +11,6 @@ import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ContainerCounterBootstrap {
 
@@ -27,29 +24,9 @@ public class ContainerCounterBootstrap {
   CounterService counterService = new CounterServiceImpl(matrixProcessor);
 
   @SneakyThrows
-  public void bootstrap(String[] args) {
-    try {
-      validateArgs(args);
-    } catch (IllegalArgumentException e) {
-      System.out.println(e.getMessage());
-      return;
-    }
+  public void bootstrap() {
 
-    counterService.countContainers(args[0]);
+    counterService.countContainers();
   }
 
-  private void validateArgs(String[] args) {
-    if (args.length != 1) {
-      throw new IllegalArgumentException(String.format("Invalid number of arguments: %d (expected 1)", args.length));
-    }
-    if (args[0].isBlank()) {
-      throw new IllegalArgumentException("Blank argument not allowed");
-    }
-    if (!args[0].endsWith(".txt")) {
-      throw new IllegalArgumentException(String.format("Invalid file extension: %s (expected \".txt\")", args[0]));
-    }
-    if (Files.notExists(Paths.get(args[0]))) {
-      throw new IllegalArgumentException(String.format("File not found: %s", args[0]));
-    }
-  }
 }

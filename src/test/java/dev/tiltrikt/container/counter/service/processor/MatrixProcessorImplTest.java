@@ -169,6 +169,17 @@ class MatrixProcessorImplTest {
   }
 
   @Test
+  void givenEmptyMatrix_whenCount_thenThrownNothing() {
+    char[][] matrix = {
+        null,
+        null,
+        null
+    };
+
+    assertDoesNotThrow(() -> matrixProcessor.count(matrix));
+  }
+
+  @Test
   void givenMatrixWithLeftAndRightSymbol_whenCount_thenThrownNothing() {
     char[][] matrix = {
         {'.', '.', '.', '.'},

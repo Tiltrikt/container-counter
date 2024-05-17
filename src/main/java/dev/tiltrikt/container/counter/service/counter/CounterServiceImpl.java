@@ -1,7 +1,7 @@
 package dev.tiltrikt.container.counter.service.counter;
 
-import dev.tiltrikt.container.counter.service.parser.FileParser;
-import dev.tiltrikt.container.counter.service.parser.FileParserImpl;
+import dev.tiltrikt.container.counter.service.parser.InputParser;
+import dev.tiltrikt.container.counter.service.parser.InputParserImpl;
 import dev.tiltrikt.container.counter.service.processor.MatrixProcessor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * and using a matrix processor to count the containers.<br>
  *
  * This implementation uses {@link MatrixProcessor} that counts containers in
- * 3xN matrix and {@link FileParser} for parsing file to matrix.
+ * 3xN matrix and {@link InputParser} for parsing file to matrix.
  */
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -30,16 +30,14 @@ public class CounterServiceImpl implements CounterService {
    * until the end of file is reached.<br>
    *
    * Method also checks first and last line for the presence of specific symbols.
-   *
-   * @param fileName The name of the file containing map with containers.
    */
-  public void countContainers(@NotNull String fileName) {
-    FileParser fileParser = new FileParserImpl(fileName);
+  public void countContainers() {
+    InputParser inputParser = new InputParserImpl();
 
     long counter = 0;
     char[][] matrix = new char[3][];
 
-    while (fileParser.parseBunch(matrix) != 0) {
+    while (inputParser.parseBunch(matrix) != 0) {
       counter += matrixProcessor.count(matrix);
     }
     counter += matrixProcessor.count(matrix);
